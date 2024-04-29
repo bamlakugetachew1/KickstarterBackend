@@ -4,15 +4,24 @@ const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 const cors = require('cors');
 const hpp = require('hpp');
-const ErrorHandler = require('./middlewares/ErrorHandler');
+const session = require('express-session');
+const ErrorHandler = require('./middlewares/error.handler');
 const morgan = require('./config/morgan');
-const projectroutes = require('./routes/projectroutes');
-const creatorroutes = require('./routes/creatorroutes');
-const followerroutes = require('./routes/followerroutes');
-const paymmentroutes = require('./routes/paymentroutes');
-const favoriteroutes = require('./routes/favouritesroutes');
+const projectroutes = require('./routes/project.routes');
+const creatorroutes = require('./routes/creator.routes');
+const followerroutes = require('./routes/follower.routes');
+const paymmentroutes = require('./routes/payment.routes');
+const favoriteroutes = require('./routes/favourites.routes');
 
 const app = express();
+app.use(
+  session({
+    secret: 'goodandgooddaywillgotyouboy',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false },
+  }),
+);
 app.use(xss());
 app.use(hpp());
 app.use(helmet());

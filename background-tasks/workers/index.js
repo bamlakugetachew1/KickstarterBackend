@@ -1,6 +1,6 @@
 const { Worker } = require('bullmq');
 const compressimage = require('../../utils/compressImage');
-const compressvideo = require('../../utils/compressvideo');
+const compressvideo = require('../../utils/compressVideo');
 
 const startImageProcessor = async () => {
   const imageProcessorWorker = new Worker(

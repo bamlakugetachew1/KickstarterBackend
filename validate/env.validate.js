@@ -6,6 +6,9 @@ const validateconfig = joi
     NODE_ENV: joi.string().required(),
     MONGO_URL: joi.string().required(),
     SecretToken: joi.string().required(),
+    PaypalAccessToken: joi.string().required(),
+    RedisHost: joi.string().required(),
+    RedisPort: joi.number().required(),
   })
   .unknown();
 module.exports = validateconfig;

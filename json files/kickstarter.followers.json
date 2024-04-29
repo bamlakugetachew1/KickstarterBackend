@@ -1,0 +1,12 @@
+[{
+  "_id": {
+    "$oid": "662ff4db69b43e06e0094112"
+  },
+  "followerid": {
+    "$oid": "662fd9cc392a484f5fcec147"
+  },
+  "followedid": {
+    "$oid": "662fda05392a484f5fcec14a"
+  },
+  "__v": 0
+}]
