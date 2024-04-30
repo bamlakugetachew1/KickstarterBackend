@@ -1,0 +1,10 @@
+POST http://localhost:3000/api/pay
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY2MmZkOWNjMzkyYTQ4NGY1ZmNlYzE0NyIsInVzZXJuYW1lIjoiYmFtbGFrdSIsImFib3V0IjoidW5jb3ZlcmluZyB0aGUgdHJ1dGggYmVoaW5kIGNyZWF0aXZpdHkiLCJlbWFpbCI6ImJlYW1sYWt1QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJGFyZXFFNE1CLnFYL0o3aHg1eTBLVS42UXYxNjYvN0kxRldCSUVZYloyR0tPNzBBSWIuNDZ5IiwiZm9sbG93aW5nIjpbIjY2MmZkYTA1MzkyYTQ4NGY1ZmNlYzE0YSJdLCJpbnRlcmVzdCI6WyJzb2NpYWx3b3JrIiwic29jaWFscHJlbnVlciJdLCJ2aXNpYmlsaXR5IjoicHVibGljIiwiX192IjowLCJpZCI6IjY2MmZkOWNjMzkyYTQ4NGY1ZmNlYzE0NyJ9LCJpYXQiOjE3MTQ1MDcwNDgsImV4cCI6MTcxNDU5MzQ0OH0.zTL9_9k5jhbWPNAfSaC5XXVPLGIxC1wQr1YEo6uqeOA
+Content-Type: application/json
+
+{
+  "projectid": "662fe35c69b43e06e00940cb",
+  "payerid": "662fd9cc392a484f5fcec147",
+  "amount": "257",
+  "message": "good work"
+}

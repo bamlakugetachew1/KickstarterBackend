@@ -13,33 +13,37 @@ const saveBackedProjects = catchAsync(async (projectid, creatorid) => {
   await BackedProjects.save();
 });
 
-// exports.fundProjects = catchAsync(async (req, res) => {
-//   // const { projectid, payerid, amount, message } = req.body;
-//   req.session.paymentData = {
-//     projectid: '662fe35c69b43e06e00940cb',
-//     payerid: '662fd9cc392a484f5fcec147',
-//     amount: '400',
-//     message: 'Thanks for the motivatons and the upbring this to the world',
-//   };
-// eslint-disable-next-line max-len
-//   const paymentUrl = await payment.createPayment('30', 'thanks for the project', PaypalAccessToken);
-//   res.redirect(paymentUrl);
-// });
-
 exports.fundProjects = catchAsync(async (req, res) => {
   const { projectid, payerid, amount, message } = req.body;
-  req.session.paymentData = {
-    projectid,
-    payerid,
-    amount,
-    message,
-  };
+  process.env.PROJECT_ID = projectid;
+  process.env.PAYER_ID = payerid;
+  process.env.AMOUNT = amount;
+  process.env.MESSAGE = message;
   const paymentUrl = await payment.createPayment(amount, message, PaypalAccessToken);
   res.redirect(paymentUrl);
 });
 
+// exports.fundProjects = catchAsync(async (req, res) => {
+//   // const { projectid, payerid, amount, message } = req.body;
+//   const queryParams = new URLSearchParams({
+//     projectid: '662fe35c69b43e06e00940cb',
+//     payerid: '662fd9cc392a484f5fcec147',
+//     amount: '400',
+//     message: 'Thanks for the motivatons and the upbring this to the world',
+//   }).toString();
+//   const successUrl = `http://localhost:3000/api/pay/success?${queryParams}`;
+//   const cancelUrl = 'http://localhost:3000/api/pay/cancel';
+// eslint-disable-next-line max-len
+//   const paymentUrl = await payment.createPayment('30', 'message', PaypalAccessToken, successUrl, cancelUrl);
+//   res.redirect(paymentUrl);
+//   // res.json({ paymentUrl });
+// });
+
 exports.paymentSucessHandler = catchAsync(async (req, res) => {
-  const { projectid, payerid, amount, message } = req.session.paymentData;
+  const projectid = process.env.PROJECT_ID;
+  const payerid = process.env.PAYER_ID;
+  const amount = process.env.AMOUNT;
+  const message = process.env.MESSAGE;
   const { paymentId } = req.query;
   const paymentDetailsPromise = payment.getPaymentDetails(paymentId, PaypalAccessToken);
   const paymentDetails = await paymentDetailsPromise;
@@ -59,9 +63,7 @@ exports.paymentSucessHandler = catchAsync(async (req, res) => {
     });
     await PaymentsDetails.save();
     await Project.findOneAndUpdate({ _id: projectid }, { $inc: { amountReached: amount } });
-    return res.redirect(
-      'https://developer.paypal.com/dashboard/accounts/edit/4830085254699409270?accountName=sb-y371a30358162@personal.example.com',
-    );
+    return res.redirect('http://localhost:5173/payment/success');
   }
   return res.json({ message: 'something went wrong your account not charged' });
 });
@@ -69,9 +71,7 @@ exports.paymentSucessHandler = catchAsync(async (req, res) => {
 // eslint-disable-next-line prettier/prettier
 exports.paymentFailureHandler = catchAsync(async (req, res) => {
   req.session.destroy();
-  return res.redirect(
-    'https://developer.paypal.com/dashboard/accounts/edit/4830085254699409270?accountName=sb-y371a30358162@personal.example.com',
-  );
+  return res.redirect('http://localhost:5173/payment/failed');
 });
 
 // exports.refundPayment = catchAsync(async (req, res) => {
