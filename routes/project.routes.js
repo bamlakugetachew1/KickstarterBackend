@@ -21,6 +21,7 @@ router.get('/projects/recomended', projectcontroller.getRecomendedProject);
 router.get('/projects/stats', projectcontroller.getOverallPlatformStatus);
 router.get('/projects/single', projectcontroller.getSingleProject);
 router.get('/projects/search', projectcontroller.searchprojects);
+router.get('/projects/searchbytag', projectcontroller.searchprojectsbytag);
 router.get('/projects/singleprojectmetrics', projectcontroller.getSingleProjectStatus);
 router.get('/projects/recentfivebackers', projectcontroller.getRecentFiveBackers);
 router.delete('/projects/deleteproject/:projectid', verifyToken.verifyToken, projectcontroller.deleteProject);

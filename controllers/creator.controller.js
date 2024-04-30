@@ -2,6 +2,7 @@ const Creator = require('../models/creators.model');
 const MyProject = require('../models/myproject.model');
 const FavouriteProject = require('../models/favourites.model');
 const BackedProject = require('../models/backedproject.model');
+const Follower = require('../models/folllower.model');
 const catchAsync = require('../utils/catchAsync');
 const generateToken = require('../utils/generateToken');
 const compareHashes = require('../utils/compareHashes');
@@ -51,7 +52,7 @@ exports.loginCreator = catchAsync(async (req, res) => {
 });
 
 exports.indivisualCreatorsDetails = catchAsync(async (req, res) => {
-  const { creatorid } = req.query;
+  const { creatorid, followerid } = req.query;
   if (!creatorid) {
     return res.status(400).json({ error: 'Creator ID is required in query parameters' });
   }
@@ -63,7 +64,12 @@ exports.indivisualCreatorsDetails = catchAsync(async (req, res) => {
   if (!creator) {
     return res.status(404).json({ error: 'No creators found' });
   }
-  return res.status(200).json({ creator });
+
+  let isalreadyFollowedCreator = false;
+  if (followerid) {
+    isalreadyFollowedCreator = await Follower.findOne({ followerid, followedid: creatorid });
+  }
+  return res.status(200).json({ creator, isalreadyFollowedCreator: !!isalreadyFollowedCreator });
 });
 
 exports.getFavourites = catchAsync(async (req, res) => {

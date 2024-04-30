@@ -101,15 +101,31 @@ exports.getSingleProjectStatus = catchAsync(async (req, res) => {
 });
 
 exports.getSingleProject = catchAsync(async (req, res) => {
-  const { projectid } = req.query;
+  const { projectid, creatorid } = req.query;
+
   if (!projectid) {
     return res.status(400).json({ error: 'Project ID is required in query parameters' });
   }
-  const project = await Project.findOne({ _id: projectid }).select();
+
+  const project = await Project.findOne({ _id: projectid });
+
   if (!project) {
     return res.status(404).json({ error: 'No project found' });
   }
-  return res.status(200).json({ project });
+
+  let isalreadyAddedtofavourite = false;
+  let isalreadyBacked = false;
+
+  if (creatorid) {
+    isalreadyAddedtofavourite = await FavouriteProject.findOne({ projectid, creatorid });
+    isalreadyBacked = await BackedProject.findOne({ projectid, creatorid });
+  }
+
+  return res.status(200).json({
+    project,
+    isalreadyAddedtofavourite: !!isalreadyAddedtofavourite,
+    isalreadyBacked: !!isalreadyBacked,
+  });
 });
 
 exports.searchprojects = catchAsync(async (req, res) => {
@@ -118,6 +134,18 @@ exports.searchprojects = catchAsync(async (req, res) => {
     return res.status(400).json({ error: 'Search query is required in query parameters' });
   }
   const projects = await Project.find({ $text: { $search: searchquery } }).limit(8);
+  if (projects.length === 0) {
+    return res.status(404).json({ message: 'No results found' });
+  }
+  return res.status(200).json({ projects });
+});
+
+exports.searchprojectsbytag = catchAsync(async (req, res) => {
+  const { searchtag } = req.query;
+  if (!searchtag) {
+    return res.status(400).json({ error: 'Search tag is required in query parameters' });
+  }
+  const projects = await Project.find({ catagory: { $in: [searchtag] } }).limit(8);
   if (projects.length === 0) {
     return res.status(404).json({ message: 'No results found' });
   }
