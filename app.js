@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const hpp = require('hpp');
 const session = require('express-session');
+const path = require('path');
 const ErrorHandler = require('./middlewares/error.handler');
 const morgan = require('./config/morgan');
 const projectroutes = require('./routes/project.routes');
@@ -14,9 +15,10 @@ const paymmentroutes = require('./routes/payment.routes');
 const favoriteroutes = require('./routes/favourites.routes');
 
 const app = express();
+app.use('/videos', express.static(path.join(__dirname, 'videos')));
 app.use(
   session({
-    secret: 'goodandgooddaywillgotyouboy',
+    secret: 'samplesessionsecret',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
