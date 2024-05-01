@@ -88,11 +88,16 @@ exports.refundPayment = catchAsync(async (req, res) => {
   const { projectid, paymentemail, isAmount } = req.body;
   let amount = isAmount ? isAmount * 0.95 : 0;
   const account = await Payment.findOne({ projectid, paymentemail });
-
   if (!isAmount) {
     amount = account.amount;
   }
 
   await payment.initiatePayout(amount, account.paymentemail, PaypalAccessToken);
+  if (account) {
+    await Payment.findOneAndDelete({ projectid, paymentemail });
+  }
+  if (isAmount) {
+    await Project.findOneAndUpdate({ _id: projectid }, { completed: true });
+  }
   res.json({ message: 'Successfully sent the payment' });
 });

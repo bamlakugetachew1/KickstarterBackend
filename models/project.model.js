@@ -67,6 +67,10 @@ const projectSchema = new mongoose.Schema(
       type: Date,
       required: [true, 'A valid date is required'],
     },
+    completed: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     toJSON: { virtuals: true },
